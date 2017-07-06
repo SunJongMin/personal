@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  - 개발환경 데이터소스 설정 
+-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:p="http://www.springframework.org/schema/p"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
+        
+    <!-- properties/db.properties 참조 -->
+	<bean id="oracleHikariConfig" class="com.zaxxer.hikari.HikariConfig">
+	    <property name="poolName" value="springHikariCP" />
+	    <property name="connectionTestQuery" value="SELECT 1 FROM DUAL" />
+	    <property name="dataSourceClassName" value="#{dbProp['oracle.dataSourceClassName']}" />
+	    <property name="maximumPoolSize" value="#{dbProp['oracle.hikari.maximumPoolSize']}" />
+	    <property name="idleTimeout" value="#{dbProp['oracle.hikari.idleTimeout']}" />
+	
+	    <property name="dataSourceProperties">
+	        <props>
+	            <prop key="url">#{dbProp['oracle.dataSource.url']}</prop>
+	            <prop key="user">#{dbProp['oracle.dataSource.user']}</prop>
+	            <prop key="password">#{dbProp['oracle.dataSource.password']}</prop>
+	        </props>
+	    </property>
+	</bean>
+	
+	<!-- Oracle HikariCP configuration -->
+	<bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close">
+	    <constructor-arg ref="oracleHikariConfig" />
+	</bean>
+
+</beans>

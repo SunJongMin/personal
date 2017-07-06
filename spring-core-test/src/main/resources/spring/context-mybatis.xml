@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  - Mybatis setting
+  - context-datasource.xml 에 정의되어 있는 data source 별 sqlSessionFactory bean 관리
+-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:p="http://www.springframework.org/schema/p"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:mybatis="http://mybatis.org/schema/mybatis-spring"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+        http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring.xsd">
+
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="mapperLocations" value="classpath*:mybatis/*.xml" />
+        <property name="configuration">
+            <bean class="org.apache.ibatis.session.Configuration">
+                <property name="mapUnderscoreToCamelCase" value="true" />
+                <property name="cacheEnabled" value="true" />
+                <property name="useGeneratedKeys" value="false" />
+                <property name="defaultExecutorType" value="SIMPLE" />
+                <property name="defaultFetchSize" value="10"/>
+            </bean>
+        </property>
+    </bean>
+
+    <mybatis:scan base-package="kr.co.sunjm" factory-ref="sqlSessionFactory" />
+    <!-- For multi DB connect -->
+    <!-- annotation="kr.co.sunjm.common.annotation.MyBatisOracleMapper" -->
+</beans>
